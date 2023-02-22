@@ -8,6 +8,9 @@
 
 
 
+from os import access
+
+
 cheap_fish = [
     ["Shark","Flounder","Cod","Gurnet","Hoki","Goldfish"],
     [4.10, 4.10, 4.10, 4.10, 4.10, 4.10],
@@ -20,14 +23,19 @@ deluxe_fish = [
 
 index_for_name = 0
 index_for_price = 1
-invalid_entry = ("Please select a valid option")
+invalid_entry = "Please select a valid option"
 
 
-def fish_catagory_function ():
+def main_menu_function()
+
+
+def fish_catagory_function():
     while True:
         try:
-            print(20 * "-" + "\n 1) Deluxe \n 2) Cheaper")
-            fish_catagory = int(input("Would you like a deluxe or a cheaper fish?"))
+            divider_function()
+            print("1) Deluxe \n2) Cheaper ")
+            divider_function()
+            fish_catagory = int(input("Would you like a deluxe or a cheaper fish? "))
         except ValueError:
             print(invalid_entry)
             continue
@@ -42,20 +50,32 @@ def fish_catagory_function ():
 
 
 def fish_order_function(fish_array : list):
+    divider_function()
+    print_array_function(fish_array[index_for_name])
+    divider_function()
     while True:
         try:
-            fish_index = int(input("What fish would you like?"))
+            fish_index = int(input("What fish would you like? "))
         except ValueError:
             print(invalid_entry)
             continue
 
-        if fish_index not in range(len(fish_array[index_for_name])):
+        if fish_index not in range(len(fish_array[index_for_name]) + 1):
             print(invalid_entry)
         else:
             break
 
-    print("Fish 1: " + str(fish_index))
-    print("Fish 1 Name: " + fish_array[index_for_name][fish_index - 1] + ", Fish 1 Price: $" + str(fish_array[index_for_price][fish_index - 1]))
+    price_string = "%.2f" % (fish_array[index_for_price][fish_index - 1])
+    print("Your choice: " + fish_array[index_for_name][fish_index - 1] + ", Price: $" + price_string)
+
+
+def print_array_function(items : list):
+    for index in range(len(items)):
+        print(f"{index + 1}) {items[index]}")
+
+
+def divider_function():
+    print(20 * "-")
 
 
 fish_catagory_function()
