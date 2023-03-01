@@ -17,6 +17,11 @@ deluxe_fish = [
     [7.20, 7.20, 7.20, 7.20, 7.20, 7.20]
 ]
 
+sides = [
+    ["Chips"],
+    [1.00]
+]
+
 user_order = [
     [],
     []
@@ -25,6 +30,7 @@ user_order = [
 index_for_name = 0
 index_for_price = 1
 invalid_entry = "Please select a valid option"
+printing_width = 50
 
 
 def fish_catagory():
@@ -44,7 +50,8 @@ def fish_catagory():
             case 2:
                 fish_order(cheap_fish)
             case 3:
-                print("PLACE HOLDER")
+                print(user_order)
+
             case _:
                 print(invalid_entry)
 
@@ -66,7 +73,7 @@ def input_checking(prompt: str, array: list):
 def fish_order(fish_array: list):
     #Print menu
     divider()
-    print_array(fish_array[index_for_name])
+    print_array_multi(fish_array)
     divider()
 
     #Get index of fish from user input based on fish array, and store it
@@ -104,8 +111,18 @@ def print_array(items: list):
         print(f"{index + 1}) {items[index]}")
 
 
+def print_array_multi(items: list):
+    for index in range(len(items[0])):
+        print_item = f"{index + 1}) {items[0][index]}"
+        print_second_item = f"[{str(items[1][index])}]"
+        print_spacing = printing_width - (len(print_item) + len(print_second_item))
+        price_string = "%.2f" % (print_second_item)
+        print(print_item + (" " * print_spacing) + print_second_item + price_string)
+
+
 def divider():
-    print(20 * "-")
+    print(printing_width * "-")
+
 
 if __name__ == "__main__":
     fish_catagory()
