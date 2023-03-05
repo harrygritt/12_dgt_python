@@ -73,7 +73,7 @@ def input_checking(prompt: str, array: list):
 def fish_order(fish_array: list):
     #Print menu
     divider()
-    print_array_multi(fish_array)
+    print_array_multi([fish_array[index_for_name], format_price_function(fish_array[index_for_price])])
     divider()
 
     #Get index of fish from user input based on fish array, and store it
@@ -116,8 +116,14 @@ def print_array_multi(items: list):
         print_item = f"{index + 1}) {items[0][index]}"
         print_second_item = f"[{str(items[1][index])}]"
         print_spacing = printing_width - (len(print_item) + len(print_second_item))
-        price_string = "%.2f" % (print_second_item)
-        print(print_item + (" " * print_spacing) + print_second_item + price_string)
+        print(print_item + (" " * print_spacing) + print_second_item)
+
+
+def format_price_function(array: list):
+    formatted_array = array.copy()
+    for item_index in range(len(formatted_array)):
+        formatted_array[item_index] =  "$" + ("%.2f" % (formatted_array[item_index]))
+    return formatted_array
 
 
 def divider():
