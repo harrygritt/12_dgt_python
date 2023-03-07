@@ -50,8 +50,7 @@ def fish_catagory():
             case 2:
                 fish_order(cheap_fish)
             case 3:
-                print(user_order)
-
+                print_reciept()
             case _:
                 print(invalid_entry)
 
@@ -68,6 +67,7 @@ def input_checking(prompt: str, array: list):
             print(invalid_entry)
         else:
             return input_index
+
 
 #Function that orders fish
 def fish_order(fish_array: list):
@@ -125,6 +125,18 @@ def format_price_function(array: list):
         formatted_array[item_index] =  "$" + ("%.2f" % (formatted_array[item_index]))
     return formatted_array
 
+
+def print_reciept():
+    user_order = [
+    [],
+    []
+]
+    divider()
+    print("Your Reciept:")
+    divider()
+    print_array_multi([user_order[index_for_name], format_price_function(user_order[index_for_price])])
+    divider()
+    
 
 def divider():
     print(printing_width * "-")
