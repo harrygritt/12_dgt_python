@@ -7,6 +7,11 @@
 #At end of order, display names of fish (with price), total cost (display delivery cost), customer name, if cooked or frozen, if chips (plus price), and if for delivery (address and phonoe no.)
 
 
+start_options = [
+    "Start Order","Order Details","Finish Order"
+]
+
+
 cheap_fish = [
     ["Shark","Flounder","Cod","Gurnet","Hoki","Goldfish"],
     [4.10, 4.10, 4.10, 4.10, 4.10, 4.10],
@@ -33,7 +38,29 @@ invalid_entry = "Please select a valid option"
 printing_width = 50
 
 
-def fish_catagory():
+def start_menu():
+    print("Welcome to Freddy's Fast Fish")
+    divider()
+    print_array(start_options)
+    menu_index = input_checking("Please selct an option: ", start_options)
+    menu_index = int(input("Please select an option: "))
+    match menu_index:
+            case 1:
+                print("PLACEHOLDER 1")
+                catagory_input()
+            case 2:
+                print("PLACEHOLDER 2")
+                catagory_input()
+            case 3:
+                print("PLACEHOLDER 3")
+                catagory_input()
+            case _:
+                print(invalid_entry)
+
+    
+
+
+def catagory_input():
     while True:
         try:
             divider()
@@ -63,7 +90,7 @@ def input_checking(prompt: str, array: list):
             print(invalid_entry)
             continue
 
-        if input_index not in range(len(array) + 1):
+        if input_index not in range(1, len(array) + 1):
             print(invalid_entry)
         else:
             return input_index
@@ -73,7 +100,7 @@ def input_checking(prompt: str, array: list):
 def fish_order(fish_array: list):
     #Print menu
     divider()
-    print_array_multi([fish_array[index_for_name], format_price_function(fish_array[index_for_price])])
+    print_array_multi([fish_array[index_for_name], format_price(fish_array[index_for_price])])
     divider()
 
     #Get index of fish from user input based on fish array, and store it
@@ -119,7 +146,7 @@ def print_array_multi(items: list):
         print(print_item + (" " * print_spacing) + print_second_item)
 
 
-def format_price_function(array: list):
+def format_price(array: list):
     formatted_array = array.copy()
     for item_index in range(len(formatted_array)):
         formatted_array[item_index] =  "$" + ("%.2f" % (formatted_array[item_index]))
@@ -134,7 +161,7 @@ def print_reciept():
     divider()
     print("Your Reciept:")
     divider()
-    print_array_multi([user_order[index_for_name], format_price_function(user_order[index_for_price])])
+    print_array_multi([user_order[index_for_name], format_price(user_order[index_for_price])])
     divider()
     
 
@@ -143,4 +170,4 @@ def divider():
 
 
 if __name__ == "__main__":
-    fish_catagory()
+    start_menu()
