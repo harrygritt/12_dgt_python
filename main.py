@@ -43,7 +43,6 @@ def start_menu():
     divider()
     print_array(start_options)
     menu_index = input_checking("Please selct an option: ", start_options)
-    menu_index = int(input("Please select an option: "))
     match menu_index:
             case 1:
                 print("PLACEHOLDER 1")
@@ -56,8 +55,6 @@ def start_menu():
                 catagory_input()
             case _:
                 print(invalid_entry)
-
-    
 
 
 def catagory_input():
@@ -82,7 +79,7 @@ def catagory_input():
                 print(invalid_entry)
 
 
-def input_checking(prompt: str, array: list):
+def input_checking(prompt: str, array: list, start_index: int = 1):
     while True:
         try:
             input_index = int(input(prompt))
@@ -90,7 +87,7 @@ def input_checking(prompt: str, array: list):
             print(invalid_entry)
             continue
 
-        if input_index not in range(1, len(array) + 1):
+        if input_index not in range(start_index, len(array) + 1):
             print(invalid_entry)
         else:
             return input_index
@@ -109,7 +106,7 @@ def fish_order(fish_array: list):
     
     #Check number of chosen fish and calculate the amount the user can order
     fish_remaining = 7 - array_quantity_counter(fish_name, user_order[index_for_name])
-    fish_amount = input_checking("How many of this fish would you like? ", range(fish_remaining))
+    fish_amount = input_checking("How many of this fish would you like? ", range(fish_remaining), 0)
 
     #Get price from array and format as string
     item_price = (fish_array[index_for_price][fish_index - 1]) 
@@ -154,10 +151,6 @@ def format_price(array: list):
 
 
 def print_reciept():
-    user_order = [
-    [],
-    []
-]
     divider()
     print("Your Reciept:")
     divider()
