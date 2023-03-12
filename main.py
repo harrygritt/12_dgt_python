@@ -32,6 +32,9 @@ user_order = [
     []
 ]
 
+yes = {"Y", "YES", "YE", "YEP", "SURE", "YEAH"}
+no = {"N", "NO", "NAH", "NOT", "NAY"}
+
 index_for_name = 0
 index_for_price = 1
 invalid_entry = "Please select a valid option"
@@ -42,17 +45,16 @@ def start_menu():
     print("Welcome to Freddy's Fast Fish")
     divider()
     print_array(start_options)
+    divider()
     menu_index = input_checking("Please selct an option: ", start_options)
     match menu_index:
             case 1:
-                print("PLACEHOLDER 1")
                 catagory_input()
             case 2:
                 print("PLACEHOLDER 2")
                 catagory_input()
             case 3:
-                print("PLACEHOLDER 3")
-                catagory_input()
+                print_reciept()
             case _:
                 print(invalid_entry)
 
@@ -61,7 +63,7 @@ def catagory_input():
     while True:
         try:
             divider()
-            print_array(["Deluxe","Cheaper","Finish Order"])
+            print_array(["Deluxe","Cheaper","Return to Main Menu"])
             divider()
             fish_catagory = int(input("Would you like a deluxe or a cheaper fish? "))
         except ValueError:
@@ -74,7 +76,7 @@ def catagory_input():
             case 2:
                 fish_order(cheap_fish)
             case 3:
-                print_reciept()
+                start_menu()
             case _:
                 print(invalid_entry)
 
@@ -156,8 +158,18 @@ def print_reciept():
     divider()
     print_array_multi([user_order[index_for_name], format_price(user_order[index_for_price])])
     divider()
-    
+    while True:
+        confirm_order = input("Is this order correct?: ").upper()
+        if confirm_order in yes:
+            print("Thank you for ordering at Freddy's Fast Fish")
+            break
+        elif confirm_order in no:
+            print("Please restart order")
+            start_menu()
+        else:
+            print(invalid_entry)
 
+    
 def divider():
     print(printing_width * "-")
 
