@@ -23,7 +23,7 @@ deluxe_fish = [
 ]
 
 sides = [
-    ["Chips"],
+    ["Scoop of Chips"],
     [1.00]
 ]
 
@@ -63,7 +63,7 @@ def catagory_input():
     while True:
         try:
             divider()
-            print_array(["Deluxe","Cheaper","Return to Main Menu"])
+            print_array(["Deluxe", "Cheaper", "Sides", "Return to Main Menu"])
             divider()
             fish_catagory = int(input("Would you like a deluxe or a cheaper fish? "))
         except ValueError:
@@ -76,6 +76,8 @@ def catagory_input():
             case 2:
                 fish_order(cheap_fish)
             case 3:
+                fish_order(sides)
+            case 4:
                 start_menu()
             case _:
                 print(invalid_entry)
@@ -95,6 +97,10 @@ def input_checking(prompt: str, array: list, start_index: int = 1):
             return input_index
 
 
+def order_details():
+    print()
+
+
 #Function that orders fish
 def fish_order(fish_array: list):
     #Print menu
@@ -103,12 +109,12 @@ def fish_order(fish_array: list):
     divider()
 
     #Get index of fish from user input based on fish array, and store it
-    fish_index = input_checking("What fish woukld you like? ", fish_array[index_for_name])
+    fish_index = input_checking("What item would you like? ", fish_array[index_for_name])
     fish_name = fish_array[index_for_name][fish_index - 1]
     
     #Check number of chosen fish and calculate the amount the user can order
     fish_remaining = 7 - array_quantity_counter(fish_name, user_order[index_for_name])
-    fish_amount = input_checking("How many of this fish would you like? ", range(fish_remaining), 0)
+    fish_amount = input_checking("How many of this item would you like? ", range(fish_remaining), 0)
 
     #Get price from array and format as string
     item_price = (fish_array[index_for_price][fish_index - 1]) 
@@ -122,8 +128,8 @@ def fish_order(fish_array: list):
     for each in range(fish_amount):
         user_order[index_for_name].append(fish_name)
         user_order[index_for_price].append(item_price)
-    
 
+    
 def array_quantity_counter(key, array: list):
     quantity = 0
     for item in array:
@@ -169,7 +175,7 @@ def print_reciept():
         else:
             print(invalid_entry)
 
-    
+
 def divider():
     print(printing_width * "-")
 
