@@ -6,11 +6,13 @@
 #MAX 7 fish per type, e.g. 7 cod and 7 flounder is acceptable. display nice error if invalid entry.
 #At end of order, display names of fish (with price), total cost (display delivery cost), customer name, if cooked or frozen, if chips (plus price), and if for delivery (address and phonoe no.)
 
-#test
+
+import time
+import sys
+
 start_options = [
     "Start Order","Order Details","Finish Order"
 ]
-
 
 cheap_fish = [
     ["Shark","Flounder","Cod","Gurnet","Hoki","Goldfish"],
@@ -162,13 +164,38 @@ def print_reciept():
     divider()
     print("Your Reciept:")
     divider()
-    print_array_multi([user_order[index_for_name], format_price(user_order[index_for_price])])
+
+    # Create a new array to store new order (temp)
+    user_order_temp = [
+        [],
+        []
+    ]
+    # Loop through the user order
+    for each in user_order[index_for_name]:
+    #   Check if this item in the order is already in the new array
+        is_in = False
+        for alread_item in user_order_temp[index_for_name]:
+            if each in alread_item:
+                is_in = True
+                break
+
+        if is_in:
+            continue
+    
+    #       get the amount of item using the quatinty function
+        quantity = array_quantity_counter(each, user_order[index_for_name])
+    #       in the new array append the name + "x3" to name index and then append price*quantity to price index
+        user_order_temp[index_for_name].append(each + " x " + str(quantity))
+        user_order_temp[index_for_price].append(user_order[index_for_price][user_order[index_for_name].index(each)] * quantity)
+    # print multiple array
+    print_array_multi([user_order_temp[index_for_name], format_price(user_order_temp[index_for_price])])
     divider()
     while True:
         confirm_order = input("Is this order correct?: ").upper()
         if confirm_order in yes:
-            print("Thank you for ordering at Freddy's Fast Fish")
-            break
+            print("\n Thank you for ordering at Freddy's Fast Fish")
+            time.sleep(3)
+            sys.exit()
         elif confirm_order in no:
             print("Please restart order")
             start_menu()
