@@ -99,8 +99,22 @@ def input_checking(prompt: str, array: list, start_index: int = 1):
             return input_index
 
 
+#Prototype atm!!!
 def order_details():
-    print()
+    while True:
+        delivery_index = input("Would you like your order delivered?: ")
+        if delivery_index in yes:
+            print("wants delivered")
+            print("gimme name address and number + $5 surcharge")
+        elif delivery_index in no:
+            print("doesnt want delivered")
+            print("gimme name and number")
+            break
+        else:
+            print(invalid_entry)
+    
+    while True:
+        frozen_index = input("Would you like cooked?: ")
 
 
 #Function that orders fish
@@ -165,39 +179,43 @@ def print_reciept():
     print("Your Reciept:")
     divider()
 
-    # Create a new array to store new order (temp)
+    #Create a new array to store new order (temp)
     user_order_temp = [
         [],
         []
     ]
-    # Loop through the user order
+
+    #Loop through the user order
     for each in user_order[index_for_name]:
-    #   Check if this item in the order is already in the new array
+        #Check if this item in the order is already in the new array
         is_in = False
         for alread_item in user_order_temp[index_for_name]:
             if each in alread_item:
                 is_in = True
                 break
-
         if is_in:
             continue
     
-    #       get the amount of item using the quatinty function
+        #Get the amount of item using the quantity function
         quantity = array_quantity_counter(each, user_order[index_for_name])
-    #       in the new array append the name + "x3" to name index and then append price*quantity to price index
+
+        #In the new array append the name + "x3" to name index and then append price * quantity to price index
         user_order_temp[index_for_name].append(each + " x " + str(quantity))
         user_order_temp[index_for_price].append(user_order[index_for_price][user_order[index_for_name].index(each)] * quantity)
-    # print multiple array
+
+    # Print multiple array
     print_array_multi([user_order_temp[index_for_name], format_price(user_order_temp[index_for_price])])
     divider()
+
+    #Ask if order is correct
     while True:
-        confirm_order = input("Is this order correct?: ").upper()
+        confirm_order = input("Would you like to continue?: ").upper()
         if confirm_order in yes:
-            print("\n Thank you for ordering at Freddy's Fast Fish")
+            print("\nThank you for ordering at Freddy's Fast Fish")
             time.sleep(3)
             sys.exit()
         elif confirm_order in no:
-            print("Please restart order")
+            #Take user back to start menu 
             start_menu()
         else:
             print(invalid_entry)
