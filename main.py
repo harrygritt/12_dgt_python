@@ -14,6 +14,10 @@ start_options = [
     "Start Order","Order Details","Finish Order"
 ]
 
+details_menu = [
+    "For Delivery (+$5)","For Pick-up","Frozen (-$1.05 per fish)","Cooked","Return to Main Menu"
+]
+
 cheap_fish = [
     ["Shark","Flounder","Cod","Gurnet","Hoki","Goldfish"],
     [4.10, 4.10, 4.10, 4.10, 4.10, 4.10],
@@ -98,37 +102,30 @@ def input_checking(prompt: str, array: list, start_index: int = 1):
             return input_index
 
 
-def name_and_number():
-    user_name = input("What is your name?: ")
-    user_number = input("What is your phone number?: ")
-
-
-#Prototype atm!!!
 def order_details():
     while True:
-        delivery_option = input("Would you like your order delivered?: ").upper()
-        if delivery_option in yes:
-            print("wants delivered")
-            print("For delivery")
-            print("gimme name address and number + $5 surcharge")
-            break
-        elif delivery_option in no:
-            print("doesnt want delivered")
-            print("gimme name and number")
-            break
-        else:
-            print(invalid_entry)
-    
-    while True:
-        frozen_option = input("Would you like your order frozen?: ").upper()
-        if frozen_option in yes:
-            print("Order is frozen, you get a $1.05 discount per fish")
-            start_menu()
-        elif frozen_option in no:
-            print("Order is to be cooked")
-            start_menu()
-        else:
-            print(invalid_entry)
+        divider()
+        print_array(details_menu)
+        divider()
+        details_index = input_checking("Please select an option: ", details_menu)
+        match details_index:
+            case 1:
+                print("For Delivery, + $5")
+                customer_name = input("What is your name?: ")
+                customer_number = input("What is your phone number?: ")
+                customer_address = input("What is your address?: ")
+            case 2:
+                print("For Pick up")
+                customer_name = input("What is your name?: ")
+                customer_number = input("What is your phone number?: ")
+            case 3:
+                print("Frozen, - $1.05 per fish")
+            case 4:
+                print("Cooked")
+            case 5:
+                start_menu()
+            case _:
+                print(invalid_entry)
 
 
 #Function that orders fish
@@ -241,4 +238,3 @@ def divider():
 
 if __name__ == "__main__":
     start_menu()
-    print("max is the best")
