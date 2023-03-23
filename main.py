@@ -7,8 +7,10 @@
 #At end of order, display names of fish (with price), total cost (display delivery cost), customer name, if cooked or frozen, if chips (plus price), and if for delivery (address and phonoe no.)
 
 
+from email.headerregistry import Address
 import time
 import sys
+import os
 
 start_options = [
     "Start Order","Order Details","Finish Order"
@@ -33,6 +35,10 @@ sides = [
     [1.00]
 ]
 
+user_details = [
+    "Delivery/Pick-Up","Cooked/Frozen","Address","Name","Number"
+]
+
 user_order = [
     [],
     []
@@ -48,6 +54,7 @@ printing_width = 50
 
 
 def start_menu():
+    clear()
     print("Welcome to Freddy's Fast Fish")
     divider()
     print_array(start_options)
@@ -59,12 +66,17 @@ def start_menu():
             case 2:
                 order_details()
             case 3:
+                customer_name = input("What is your name?: ")
+                customer_number = input("What is your phone number?: ")
+                user_details[3] = customer_name
+                user_details[4] = customer_number
                 print_reciept()
             case _:
                 print(invalid_entry)
 
 
 def catagory_input():
+    clear()
     while True:
         try:
             divider()
@@ -103,6 +115,7 @@ def input_checking(prompt: str, array: list, start_index: int = 1):
 
 
 def order_details():
+    clear()
     while True:
         divider()
         print_array(details_menu)
@@ -111,17 +124,18 @@ def order_details():
         match details_index:
             case 1:
                 print("For Delivery, + $5")
-                customer_name = input("What is your name?: ")
-                customer_number = input("What is your phone number?: ")
                 customer_address = input("What is your address?: ")
+                user_details[0] = "For Delivery"
+                user_details[2] = customer_address
             case 2:
                 print("For Pick up")
-                customer_name = input("What is your name?: ")
-                customer_number = input("What is your phone number?: ")
+                user_details[0] = "For Pick-Up"
             case 3:
                 print("Frozen, - $1.05 per fish")
+                user_details[1] = "Frozen"
             case 4:
                 print("Cooked")
+                user_details[1] = "Cooked"
             case 5:
                 start_menu()
             case _:
@@ -130,6 +144,7 @@ def order_details():
 
 #Function that orders fish
 def fish_order(fish_array: list):
+    clear()
     #Print menu
     divider()
     print_array_multi([fish_array[index_for_name], format_price(fish_array[index_for_price])])
@@ -186,7 +201,17 @@ def format_price(array: list):
 
 
 def print_reciept():
-    divider()
+    clear()
+    user_details_copy = user_details.copy()
+    if user_details_copy[0] == "Delivery/Pick-Up":
+        print("Please input whether your order is for delivery or pick-up")
+        order_details()
+    if user_details_copy[1] == "Cooked/Frozen":
+        print("Please input whether your order is to be cooked or frozen")
+        order_details()
+    if user_details_copy[2] == "Address":
+        user_details_copy.pop(2)
+
     print("Your Reciept:")
     divider()
 
@@ -217,6 +242,10 @@ def print_reciept():
     # Print multiple array
     print_array_multi([user_order_temp[index_for_name], format_price(user_order_temp[index_for_price])])
     divider()
+    print("Order Details")
+    divider()
+    print_array(user_details_copy)
+    divider()
 
     #Ask if order is correct
     while True:
@@ -234,6 +263,10 @@ def print_reciept():
 
 def divider():
     print(printing_width * "-")
+
+
+def clear():
+    os.system("cls")
 
 
 if __name__ == "__main__":
