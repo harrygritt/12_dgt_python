@@ -23,20 +23,23 @@ details_menu = [
 cheap_fish = [
     ["Shark","Flounder","Cod","Gurnet","Hoki","Goldfish"],
     [4.10, 4.10, 4.10, 4.10, 4.10, 4.10],
+    [7, 7, 7, 7, 7, 7]
 ]
 
 deluxe_fish = [
     ["Snapper","Pink Salmon","Tuna","Smoked Marlin","Pufferfish","Blobfish"],
-    [7.20, 7.20, 7.20, 7.20, 7.20, 7.20]
+    [7.20, 7.20, 7.20, 7.20, 7.20, 7.20],
+    [7, 7, 7, 7, 7, 7]
 ]
 
 sides = [
     ["Scoop of Chips"],
-    [1.00]
+    [1.00],
+    [84]
 ]
 
 user_details = [
-    "Delivery/Pick-Up","Cooked/Frozen","Address","Name","Number"
+    "Delivery/Pick-Up","Cooked/Frozen","Name","Number","Address"
 ]
 
 user_order = [
@@ -49,6 +52,7 @@ no = {"N", "NO", "NAH", "NOT", "NAY"}
 
 index_for_name = 0
 index_for_price = 1
+index_for_quantity = 2
 invalid_entry = "Please select a valid option"
 printing_width = 50
 
@@ -68,8 +72,8 @@ def start_menu():
             case 3:
                 customer_name = input("What is your name?: ")
                 customer_number = input("What is your phone number?: ")
-                user_details[3] = customer_name
-                user_details[4] = customer_number
+                user_details[2] = customer_name
+                user_details[3] = customer_number
                 print_reciept()
             case _:
                 print(invalid_entry)
@@ -82,18 +86,18 @@ def catagory_input():
             divider()
             print_array(["Deluxe", "Cheaper", "Sides", "Return to Main Menu"])
             divider()
-            fish_catagory = int(input("Would you like a deluxe or a cheaper fish? "))
+            item_catagory = int(input("Please select a catagory: "))
         except ValueError:
             print(invalid_entry)
             continue
         
-        match fish_catagory:
+        match item_catagory:
             case 1:
-                fish_order(deluxe_fish)
+                item_order(deluxe_fish)
             case 2:
-                fish_order(cheap_fish)
+                item_order(cheap_fish)
             case 3:
-                fish_order(sides)
+                item_order(sides)
             case 4:
                 start_menu()
             case _:
@@ -115,8 +119,9 @@ def input_checking(prompt: str, array: list, start_index: int = 1):
 
 
 def order_details():
-    clear()
+    
     while True:
+        clear()
         divider()
         print_array(details_menu)
         divider()
@@ -126,7 +131,7 @@ def order_details():
                 print("For Delivery, + $5")
                 customer_address = input("What is your address?: ")
                 user_details[0] = "For Delivery"
-                user_details[2] = customer_address
+                user_details[4] = customer_address
             case 2:
                 print("For Pick up")
                 user_details[0] = "For Pick-Up"
@@ -142,33 +147,33 @@ def order_details():
                 print(invalid_entry)
 
 
-#Function that orders fish
-def fish_order(fish_array: list):
+#Function that orders items
+def item_order(item_array: list):
     clear()
     #Print menu
     divider()
-    print_array_multi([fish_array[index_for_name], format_price(fish_array[index_for_price])])
+    print_array_multi([item_array[index_for_name], format_price(item_array[index_for_price])])
     divider()
 
-    #Get index of fish from user input based on fish array, and store it
-    fish_index = input_checking("What item would you like? ", fish_array[index_for_name])
-    fish_name = fish_array[index_for_name][fish_index - 1]
+    #Get index of item from user input based on item array, and store it
+    item_index = input_checking("What item would you like? ", item_array[index_for_name])
+    item_name = item_array[index_for_name][item_index - 1]
     
-    #Check number of chosen fish and calculate the amount the user can order
-    fish_remaining = 7 - array_quantity_counter(fish_name, user_order[index_for_name])
-    fish_amount = input_checking("How many of this item would you like? ", range(fish_remaining), 0)
+    #Check number of chosen item and calculate the amount the user can order
+    item_remaining = (item_array[index_for_quantity][item_index - 1]) - array_quantity_counter(item_name, user_order[index_for_name])
+    item_amount = input_checking("How many of this item would you like? ", range(item_remaining), 0)
 
     #Get price from array and format as string
-    item_price = (fish_array[index_for_price][fish_index - 1]) 
-    price_string = "%.2f" % (item_price * fish_amount)
+    item_price = (item_array[index_for_price][item_index - 1]) 
+    price_string = "%.2f" % (item_price * item_amount)
 
-    #Print ordered fish and price
-    print("Your choice: " + fish_name + " x" + str(fish_amount) + ", Price: $"
+    #Print ordered item and price
+    print("Your choice: " + item_name + " x" + str(item_amount) + ", Price: $"
          + price_string)
 
-    #Put ordered fish in user's order array
-    for each in range(fish_amount):
-        user_order[index_for_name].append(fish_name)
+    #Put ordered item in user's order array
+    for each in range(item_amount):
+        user_order[index_for_name].append(item_name)
         user_order[index_for_price].append(item_price)
 
     
@@ -209,7 +214,7 @@ def print_reciept():
     if user_details_copy[1] == "Cooked/Frozen":
         print("Please input whether your order is to be cooked or frozen")
         order_details()
-    if user_details_copy[2] == "Address":
+    if user_details_copy[4] == "Address":
         user_details_copy.pop(2)
 
     print("Your Reciept:")
