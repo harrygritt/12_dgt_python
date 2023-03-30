@@ -1,3 +1,4 @@
+#Notes:
 #Cheap fish ($4.10 each): Shark, Flounder, Cod, Gurnet, Hoki, and Goldfish.
 #Deluxe Fish ($7.20 each): Snapper, Pink Salmon, Tuna, Smoked Marlin, Pufferfish, Blobfish.
 #If Frozen - discount $1.05 per fish item
@@ -6,12 +7,12 @@
 #MAX 7 fish per type, e.g. 7 cod and 7 flounder is acceptable. display nice error if invalid entry.
 #At end of order, display names of fish (with price), total cost (display delivery cost), customer name, if cooked or frozen, if chips (plus price), and if for delivery (address and phonoe no.)
 
-
-from email.headerregistry import Address
+#Import modules
 import time
 import sys
 import os
 
+#Variables
 start_options = [
     "Start Order","Order Details","Finish Order"
 ]
@@ -57,35 +58,49 @@ invalid_entry = "Please select a valid option"
 printing_width = 50
 
 
+#Main menu function
 def start_menu():
+    #Clear screen 
     clear()
     print("Welcome to Freddy's Fast Fish")
+    #Print menu
     divider()
     print_array(start_options)
     divider()
-    menu_index = input_checking("Please selct an option: ", start_options)
+    #Ask for menu option
+    menu_index = input_checking("Please select an option: ", start_options)
     match menu_index:
             case 1:
+                #Call item catagory function
                 catagory_input()
             case 2:
+                #Call order details function
                 order_details()
             case 3:
+                #Ask name and number of user
                 customer_name = input("What is your name?: ")
                 customer_number = input("What is your phone number?: ")
+                #Store variables in details list
                 user_details[2] = customer_name
                 user_details[3] = customer_number
+                #Call reciept function
                 print_reciept()
             case _:
+                #Tell user to input valid entry and re-ask input
                 print(invalid_entry)
 
 
+#Item catagory menu function
 def catagory_input():
     clear()
     while True:
+        #Show menu and warn user if input is invalid
         try:
+            #Print menu
             divider()
             print_array(["Deluxe", "Cheaper", "Sides", "Return to Main Menu"])
             divider()
+            #Ask user for menu option
             item_catagory = int(input("Please select a catagory: "))
         except ValueError:
             print(invalid_entry)
@@ -93,6 +108,7 @@ def catagory_input():
         
         match item_catagory:
             case 1:
+                #Call function based on input above with relative menu
                 item_order(deluxe_fish)
             case 2:
                 item_order(cheap_fish)
@@ -104,44 +120,58 @@ def catagory_input():
                 print(invalid_entry)
 
 
+#Error checking function
 def input_checking(prompt: str, array: list, start_index: int = 1):
+    #Loop while input is invalid
     while True:
         try:
             input_index = int(input(prompt))
         except ValueError:
             print(invalid_entry)
             continue
-
+        #Check if option is in chosen list/menu, if not, display error message and loop
         if input_index not in range(start_index, len(array) + 1):
             print(invalid_entry)
         else:
             return input_index
 
 
+#Users details function
 def order_details():
-    
     while True:
+        #Clear screen and print menu
         clear()
         divider()
         print_array(details_menu)
         divider()
+        #Ask user for details
         details_index = input_checking("Please select an option: ", details_menu)
         match details_index:
             case 1:
-                print("For Delivery, + $5")
+                #Tell user what they input
+                print("For Delivery, + $5.00")
+                #Ask for user's address
                 customer_address = input("What is your address?: ")
+                #Store that order is "For Delivery" in details list
                 user_details[0] = "For Delivery"
+                #Store variables in details list
                 user_details[4] = customer_address
+                #Block process for 2 seconds so user can see statement
+                time.sleep(2)
             case 2:
                 print("For Pick up")
                 user_details[0] = "For Pick-Up"
+                time.sleep(2)
             case 3:
                 print("Frozen, - $1.05 per fish")
                 user_details[1] = "Frozen"
+                time.sleep(2)
             case 4:
                 print("Cooked")
                 user_details[1] = "Cooked"
+                time.sleep(2)
             case 5:
+                #Call main menu
                 start_menu()
             case _:
                 print(invalid_entry)
@@ -176,51 +206,74 @@ def item_order(item_array: list):
         user_order[index_for_name].append(item_name)
         user_order[index_for_price].append(item_price)
 
-    
+
+#Counting quantity of item in list function
 def array_quantity_counter(key, array: list):
+    #Set quantity to 0
     quantity = 0
+    #Loop through each item in the list, if the item is the same as the key then increase quantity 
     for item in array:
         if item == key:
             quantity += 1
     return quantity
 
 
+#Format single level list function
 def print_array(items: list):
+    #For every index for the item in the list
     for index in range(len(items)):
+        #Print index and item
         print(f"{index + 1}) {items[index]}")
 
 
+#Format multi-level list function
 def print_array_multi(items: list):
+    #For every index fro the first item in list
     for index in range(len(items[0])):
+        #Store the index and the first item
         print_item = f"{index + 1}) {items[0][index]}"
+        #Store the second item
         print_second_item = f"[{str(items[1][index])}]"
+        #Space out according to printing width
         print_spacing = printing_width - (len(print_item) + len(print_second_item))
+        #Print item with correct spacing
         print(print_item + (" " * print_spacing) + print_second_item)
 
 
+#Format price printing function
 def format_price(array: list):
+    #Create copy of array so original is unaffected
     formatted_array = array.copy()
+    #For each index in the array
     for item_index in range(len(formatted_array)):
+        #Add the dollar sign and format the price to 2 decimal places
         formatted_array[item_index] =  "$" + ("%.2f" % (formatted_array[item_index]))
     return formatted_array
 
 
+#Printing reciept function
 def print_reciept():
     clear()
+    #Make copy of user details
     user_details_copy = user_details.copy()
+    #Check if copy has specified detail in it, if not take user back to input for the detail
     if user_details_copy[0] == "Delivery/Pick-Up":
         print("Please input whether your order is for delivery or pick-up")
+        #Block process for 2 seconds so user can see statement
+        time.sleep(2)
         order_details()
     if user_details_copy[1] == "Cooked/Frozen":
         print("Please input whether your order is to be cooked or frozen")
+        time.sleep(2)
         order_details()
+    #Check if user has inputed their address for delivery, if not, don't print address
     if user_details_copy[4] == "Address":
-        user_details_copy.pop(2)
+        user_details_copy.pop(4)
 
     print("Your Reciept:")
     divider()
 
-    #Create a new array to store new order (temp)
+    #Create a new array to store new order (temporary)
     user_order_temp = [
         [],
         []
@@ -244,7 +297,7 @@ def print_reciept():
         user_order_temp[index_for_name].append(each + " x " + str(quantity))
         user_order_temp[index_for_price].append(user_order[index_for_price][user_order[index_for_name].index(each)] * quantity)
 
-    # Print multiple array
+    #Print multiple array
     print_array_multi([user_order_temp[index_for_name], format_price(user_order_temp[index_for_price])])
     divider()
     print("Order Details")
@@ -257,6 +310,7 @@ def print_reciept():
         confirm_order = input("Would you like to continue?: ").upper()
         if confirm_order in yes:
             print("\nThank you for ordering at Freddy's Fast Fish")
+            #Block process for 3 seconds and close program
             time.sleep(3)
             sys.exit()
         elif confirm_order in no:
@@ -266,13 +320,18 @@ def print_reciept():
             print(invalid_entry)
 
 
+#Printing divider function
 def divider():
+    #Printing divider
     print(printing_width * "-")
 
 
+#Clearing sreen function
 def clear():
+    #Clearing screen
     os.system("cls")
 
 
+#Check if file name is "main" 
 if __name__ == "__main__":
     start_menu()
