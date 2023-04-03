@@ -218,6 +218,24 @@ def array_quantity_counter(key, array: list):
     return quantity
 
 
+def price_count_array():
+    #Store a base number to start counting on (0 if pickup, 5 if delivery)
+    price_change = 0
+    if user_details[0] == "For Delivery":
+        price_change = 5
+    #Loop through each item in the second array
+    for item_index in range(len(user_order[index_for_price])):
+    #Add the price 
+        price_change += user_order[index_for_price][item_index]
+    #If frozen -$1.05 from the total
+        if user_details[1] == "Frozen" and user_order[index_for_name][item_index] not in sides[index_for_name]:
+            price_change -= 1.05
+    #Format price
+    total_price = "%.2f" % (price_change)
+    #Print total
+    print("Total:" + " " * 37 + "[$" + total_price + "]")
+
+
 #Format single level list function
 def print_array(items: list):
     #For every index for the item in the list
@@ -299,8 +317,9 @@ def print_reciept():
 
     #Print multiple array
     print_array_multi([user_order_temp[index_for_name], format_price(user_order_temp[index_for_price])])
+    price_count_array()
     divider()
-    print("Order Details")
+    print("Order Details:")
     divider()
     print_array(user_details_copy)
     divider()
