@@ -1,11 +1,3 @@
-#Notes:
-#Cheap fish ($4.10 each): Shark, Flounder, Cod, Gurnet, Hoki, and Goldfish.
-#Deluxe Fish ($7.20 each): Snapper, Pink Salmon, Tuna, Smoked Marlin, Pufferfish, Blobfish.
-#If Frozen - discount $1.05 per fish item
-#If Delivery - plus $5.00 to total cost, ask name, address, and phone no.
-#If Pick up - ask name and phone no.
-#MAX 7 fish per type, e.g. 7 cod and 7 flounder is acceptable. display nice error if invalid entry.
-#At end of order, display names of fish (with price), total cost (display delivery cost), customer name, if cooked or frozen, if chips (plus price), and if for delivery (address and phonoe no.)
 
 #Import modules
 import time
@@ -14,7 +6,7 @@ import os
 
 #Variables
 start_options = [
-    "Start Order","Order Details","Finish Order"
+    "Start Order","Order Details","Finish Order","x1Cancel Order"
 ]
 
 details_menu = [
@@ -85,6 +77,12 @@ def start_menu():
                 user_details[3] = customer_number
                 #Call reciept function
                 print_reciept()
+            case 4:
+                print("Cancelling Order\nPlease come again")
+                #Block process for 2 seconds so user can see statement
+                time.sleep(2)
+                #Closing program
+                sys.exit()
             case _:
                 #Tell user to input valid entry and re-ask input
                 print(invalid_entry)
@@ -227,12 +225,12 @@ def price_count_array():
     for item_index in range(len(user_order[index_for_price])):
     #Add the price 
         price_change += user_order[index_for_price][item_index]
-    #If frozen -$1.05 from the total
+    #If frozen -$1.05 from each fish ordered
         if user_details[1] == "Frozen" and user_order[index_for_name][item_index] not in sides[index_for_name]:
             price_change -= 1.05
-    #Format price
+    #Format/round price
     total_price = "%.2f" % (price_change)
-    #Print total
+    #Print total price
     print("Total:" + " " * 37 + "[$" + total_price + "]")
 
 
