@@ -97,6 +97,9 @@ def start_menu():
 # Item catagory menu function
 def catagory_input():
     clear()
+
+    # Tell program user is not yet ordering a side
+    ordering_sides = 0
     while True:
         # Show menu and warn user if input is invalid
         try:
@@ -118,7 +121,11 @@ def catagory_input():
             case 2:
                 item_order(cheap_fish)
             case 3:
+                # Tell program that user is ordering a side (for error message)
+                ordering_sides = 1
                 item_order(sides)
+                # Reset variable
+                ordering_sides = 0
             case 4:
                 start_menu()
             case _:
@@ -138,8 +145,10 @@ def input_checking(prompt: str, array: list, start_index: int = 1, type = "none"
         
         # Check if option is in chosen list/menu, if not, display error message and loop
         if input_index not in range(start_index, len(array) + 1):
-            if type == "quantity":
-                print("Please input an integer within the maximum amount")
+            if type == "quantity" and ordering_sides = 0:
+                print("Please input an integer between 1 and 7")
+            if type == "quantity" and ordering_sides = 1:
+                print("Please input an integer between 1 and 84")
             else:
                 print(INVALID_MENU_ENTRY)
         else:
@@ -394,6 +403,4 @@ def clear():
     os.system("cls")
 
 
-# Check if file name is "main"
-if __name__ == "__main__":
     start_menu()
