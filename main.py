@@ -1,4 +1,5 @@
 # Import modules
+from operator import inv
 import time
 import sys
 import os
@@ -45,7 +46,7 @@ no = {"N", "NO", "NAH", "NOT", "NAY"}
 INDEX_FOR_NAME = 0
 INDEX_FOR_PRICE = 1
 INDEX_FOR_QUANTITY = 2
-INVALID_ENTRY = "Please select a valid option"
+INVALID_MENU_ENTRY = "Please select a valid menu option"
 PRINTING_WIDTH = 50
 
 
@@ -90,7 +91,7 @@ def start_menu():
             sys.exit()
         case _:
             # Tell user to input valid entry and re-ask input
-            print(INVALID_ENTRY)
+            print(INVALID_MENU_ENTRY)
 
 
 # Item catagory menu function
@@ -107,7 +108,7 @@ def catagory_input():
             # Ask user for menu option
             item_catagory = int(input("Please select a catagory: "))
         except ValueError:
-            print(INVALID_ENTRY)
+            print(INVALID_MENU_ENTRY)
             continue
 
         match item_catagory:
@@ -121,23 +122,26 @@ def catagory_input():
             case 4:
                 start_menu()
             case _:
-                print(INVALID_ENTRY)
+                print(INVALID_MENU_ENTRY)
 
 
 # Error checking function
-def input_checking(prompt: str, array: list, start_index: int = 1):
+def input_checking(prompt: str, array: list, start_index: int = 1, type = "none"):
 
     # Loop while input is invalid
     while True:
         try:
             input_index = int(input(prompt))
         except ValueError:
-            print(INVALID_ENTRY)
+            print(INVALID_MENU_ENTRY, "by entering a valid number")
             continue
         
         # Check if option is in chosen list/menu, if not, display error message and loop
         if input_index not in range(start_index, len(array) + 1):
-            print(INVALID_ENTRY)
+            if type == "quantity":
+                print("Please input an integer within the maximum amount")
+            else:
+                print(INVALID_MENU_ENTRY)
         else:
             return input_index
 
@@ -186,7 +190,7 @@ def order_details():
                 # Call main menu
                 start_menu()
             case _:
-                print(INVALID_ENTRY)
+                print(INVALID_MENU_ENTRY)
 
 
 # Function that orders items
@@ -208,7 +212,7 @@ def item_order(item_array: list):
     item_remaining = (item_array[INDEX_FOR_QUANTITY][item_index - 1]) - \
         array_quantity_counter(item_name, user_order[INDEX_FOR_NAME])
     item_amount = input_checking(
-        "How many of this item would you like? ", range(item_remaining), 0)
+        "How many of this item would you like? ", range(item_remaining), 0, "quantity")
 
     # Get price from array and format as string
     item_price = (item_array[INDEX_FOR_PRICE][item_index - 1])
@@ -375,7 +379,7 @@ def print_reciept():
             # Take user back to start menu
             start_menu()
         else:
-            print(INVALID_ENTRY)
+            print(INVALID_MENU_ENTRY)
 
 
 # Printing divider function
@@ -387,7 +391,7 @@ def divider():
 # Clearing sreen function
 def clear():
     # Clearing screen
-    os.system("clear")
+    os.system("cls")
 
 
 # Check if file name is "main"
