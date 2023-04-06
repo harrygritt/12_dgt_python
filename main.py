@@ -374,11 +374,28 @@ def print_reciept():
     while True:
         confirm_order = input("Would you like to complete this order? (input yes or no): ").upper()
         if confirm_order in yes:
-            print("\nThank you for ordering at Freddy's Fast Fish")
+            extra_order = input("new order?: ").upper()
+            if extra_order in no:
+                print("\nThank you for ordering at Freddy's Fast Fish")
 
-            # Block process for 3 seconds and close program
-            time.sleep(3)
-            sys.exit()
+                # Block process for 3 seconds and close program
+                time.sleep(3)
+                sys.exit()
+            if extra_order in yes:
+                user_details = [
+                "Delivery/Pick-Up", "Cooked/Frozen", "Name", "Number", "Address"
+                ]
+
+                user_order = [
+                    [],
+                    []
+                ]
+
+                start_menu()
+
+            else:
+                print(INVALID_MENU_ENTRY)
+                
         elif confirm_order in no:
             # Take user back to start menu
             start_menu()
