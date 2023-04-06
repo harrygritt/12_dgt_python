@@ -133,7 +133,7 @@ def catagory_input():
 
 
 # Error checking function
-def input_checking(prompt: str, array: list, start_index: int = 1, type = "none"):
+def input_checking(prompt: str, array: list, start_index: int = 1, error_message = INVALID_MENU_ENTRY):
 
     # Loop while input is invalid
     while True:
@@ -145,12 +145,7 @@ def input_checking(prompt: str, array: list, start_index: int = 1, type = "none"
         
         # Check if option is in chosen list/menu, if not, display error message and loop
         if input_index not in range(start_index, len(array) + 1):
-            if type == "quantity" and ordering_sides = 0:
-                print("Please input an integer between 1 and 7")
-            if type == "quantity" and ordering_sides = 1:
-                print("Please input an integer between 1 and 84")
-            else:
-                print(INVALID_MENU_ENTRY)
+                print(error_message)
         else:
             return input_index
 
@@ -160,6 +155,7 @@ def order_details():
     while True:
         # Clear screen and print menu
         clear()
+        print("Order Options")
         divider()
         print_array(details_menu)
         divider()
@@ -220,8 +216,11 @@ def item_order(item_array: list):
     # Check number of chosen item and calculate the amount the user can order
     item_remaining = (item_array[INDEX_FOR_QUANTITY][item_index - 1]) - \
         array_quantity_counter(item_name, user_order[INDEX_FOR_NAME])
+
+    maximium_error = f"Please enter a number between 0 and {item_remaining}"
+
     item_amount = input_checking(
-        "How many of this item would you like? ", range(item_remaining), 0, "quantity")
+        "How many of this item would you like? ", range(item_remaining), 0, error_message = maximium_error)
 
     # Get price from array and format as string
     item_price = (item_array[INDEX_FOR_PRICE][item_index - 1])
@@ -365,6 +364,9 @@ def print_reciept():
         user_order_temp[INDEX_FOR_PRICE].append(
             user_order[INDEX_FOR_PRICE][user_order[INDEX_FOR_NAME].index(each)] * quantity)
 
+    print("Your Reciept:")
+    divider()
+
     # Print multiple array
     print_array_multi([user_order_temp[INDEX_FOR_NAME],
                       format_price(user_order_temp[INDEX_FOR_PRICE])])
@@ -377,7 +379,7 @@ def print_reciept():
 
     # Ask if order is correct
     while True:
-        confirm_order = input("Would you like to continue?: ").upper()
+        confirm_order = input("Would you like to complete this order? (input yes or no): ").upper()
         if confirm_order in yes:
             print("\nThank you for ordering at Freddy's Fast Fish")
 
@@ -402,5 +404,6 @@ def clear():
     # Clearing screen
     os.system("cls")
 
-
+#Check if file name is "main" 
+if __name__ == "__main__":
     start_menu()
