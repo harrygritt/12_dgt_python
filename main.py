@@ -97,9 +97,6 @@ def start_menu():
 # Item catagory menu function
 def catagory_input():
     clear()
-
-    # Tell program user is not yet ordering a side
-    ordering_sides = 0
     while True:
         # Show menu and warn user if input is invalid
         try:
@@ -121,11 +118,7 @@ def catagory_input():
             case 2:
                 item_order(cheap_fish)
             case 3:
-                # Tell program that user is ordering a side (for error message)
-                ordering_sides = 1
                 item_order(sides)
-                # Reset variable
-                ordering_sides = 0
             case 4:
                 start_menu()
             case _:
