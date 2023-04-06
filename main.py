@@ -126,8 +126,7 @@ def catagory_input():
 
 
 # Error checking function
-def input_checking(prompt: str, array: list, start_index: int = 1, error_message = INVALID_MENU_ENTRY):
-
+def input_checking(prompt: str, array: list, start_index: int = 1, error_message=INVALID_MENU_ENTRY):
     # Loop while input is invalid
     while True:
         try:
@@ -135,10 +134,10 @@ def input_checking(prompt: str, array: list, start_index: int = 1, error_message
         except ValueError:
             print(INVALID_MENU_ENTRY, "by entering a valid number")
             continue
-        
+
         # Check if option is in chosen list/menu, if not, display error message and loop
         if input_index not in range(start_index, len(array) + 1):
-                print(error_message)
+            print(error_message)
         else:
             return input_index
 
@@ -198,7 +197,7 @@ def item_order(item_array: list):
     # Print menu
     divider()
     print_array_multi([item_array[INDEX_FOR_NAME],
-                      format_price(item_array[INDEX_FOR_PRICE])])
+                       format_price(item_array[INDEX_FOR_PRICE])])
     divider()
 
     # Get index of item from user input based on item array, and store it
@@ -208,12 +207,12 @@ def item_order(item_array: list):
 
     # Check number of chosen item and calculate the amount the user can order
     item_remaining = (item_array[INDEX_FOR_QUANTITY][item_index - 1]) - \
-        array_quantity_counter(item_name, user_order[INDEX_FOR_NAME])
+                     array_quantity_counter(item_name, user_order[INDEX_FOR_NAME])
 
     maximium_error = f"Please enter a number between 0 and {item_remaining}"
 
     item_amount = input_checking(
-        "How many of this item would you like? ", range(item_remaining), 0, error_message = maximium_error)
+        "How many of this item would you like? ", range(item_remaining), 0, error_message=maximium_error)
 
     # Get price from array and format as string
     item_price = (item_array[INDEX_FOR_PRICE][item_index - 1])
@@ -251,7 +250,7 @@ def price_count_array():
     for item_index in range(len(user_order[INDEX_FOR_PRICE])):
         # Add the price
         price_change += user_order[INDEX_FOR_PRICE][item_index]
-   
+
         # If frozen -$1.05 from each fish ordered
         if user_details[1] == "Frozen" and user_order[INDEX_FOR_NAME][item_index] not in sides[INDEX_FOR_NAME]:
             price_change -= 1.05
@@ -265,10 +264,8 @@ def price_count_array():
 
 # Format single level list function
 def print_array(items: list):
-
     # For every index for the item in the list
     for index in range(len(items)):
-
         # Print index and item
         print(f"{index + 1}) {items[index]}")
 
@@ -277,7 +274,6 @@ def print_array(items: list):
 def print_array_multi(items: list):
     # For every index fro the first item in list
     for index in range(len(items[0])):
-
         # Store the index and the first item
         print_item = f"{index + 1}) {items[0][index]}"
 
@@ -286,7 +282,7 @@ def print_array_multi(items: list):
 
         # Space out according to printing width
         print_spacing = PRINTING_WIDTH - \
-            (len(print_item) + len(print_second_item))
+                        (len(print_item) + len(print_second_item))
 
         # Print item with correct spacing
         print(print_item + (" " * print_spacing) + print_second_item)
@@ -299,10 +295,9 @@ def format_price(array: list):
 
     # For each index in the array
     for item_index in range(len(formatted_array)):
-
         # Add the dollar sign and format the price to 2 decimal places
         formatted_array[item_index] = "$" + \
-            ("%.2f" % (formatted_array[item_index]))
+                                      ("%.2f" % (formatted_array[item_index]))
     return formatted_array
 
 
@@ -342,8 +337,8 @@ def print_reciept():
     for each in user_order[INDEX_FOR_NAME]:
         # Check if this item in the order is already in the new array
         is_in = False
-        for alread_item in user_order_temp[INDEX_FOR_NAME]:
-            if each in alread_item:
+        for already_item in user_order_temp[INDEX_FOR_NAME]:
+            if each in already_item:
                 is_in = True
                 break
         if is_in:
@@ -357,12 +352,16 @@ def print_reciept():
         user_order_temp[INDEX_FOR_PRICE].append(
             user_order[INDEX_FOR_PRICE][user_order[INDEX_FOR_NAME].index(each)] * quantity)
 
-    print("Your Reciept:")
+    if user_details_copy[0] == "For Delivery":
+        user_order_temp[INDEX_FOR_NAME].append("Delivery Charge")
+        user_order_temp[INDEX_FOR_PRICE].append(5)
+
+    print("Your Receipt:")
     divider()
 
     # Print multiple array
     print_array_multi([user_order_temp[INDEX_FOR_NAME],
-                      format_price(user_order_temp[INDEX_FOR_PRICE])])
+                       format_price(user_order_temp[INDEX_FOR_PRICE])])
     price_count_array()
     divider()
     print("Order Details:")
@@ -382,20 +381,23 @@ def print_reciept():
                 time.sleep(3)
                 sys.exit()
             if extra_order in yes:
-                user_details = [
-                "Delivery/Pick-Up", "Cooked/Frozen", "Name", "Number", "Address"
-                ]
 
-                user_order = [
-                    [],
-                    []
-                ]
+                # Resetting user details
+                user_details[0] = "Delivery/Pick-Up"
+                user_details[1] = "Cooked/Frozen"
+                user_details[2] = "Name"
+                user_details[3] = "Number"
+                user_details[4] = "Address"
+
+                # Clearing user order
+                user_order[0].clear()
+                user_order[1].clear()
 
                 start_menu()
 
             else:
                 print(INVALID_MENU_ENTRY)
-                
+
         elif confirm_order in no:
             # Take user back to start menu
             start_menu()
@@ -414,6 +416,7 @@ def clear():
     # Clearing screen
     os.system("cls")
 
-#Check if file name is "main" 
+
+# Check if file name is "main"
 if __name__ == "__main__":
     start_menu()
