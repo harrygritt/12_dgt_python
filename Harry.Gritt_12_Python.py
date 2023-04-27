@@ -6,29 +6,33 @@ import os
 
 # Variables
 start_options = [
-    "Start Order", "Order Details", "Finish Order", "Cancel Order"
+    "Start Order", "Order Options", "Finish Order", "Cancel Order"
 ]
 
 details_menu = [
     "For Delivery (+$5)", "For Pick-up", "Frozen (-$1.05 per fish)", "Cooked", "Return to Main Menu"
 ]
 
-cheap_fish = [
-    ["Shark", "Flounder", "Cod", "Gurnet", "Hoki", "Goldfish"],
-    [4.10, 4.10, 4.10, 4.10, 4.10, 4.10],
-    [7, 7, 7, 7, 7, 7]
+deluxe_fish = [
+    ["Snapper", 7.20, 7], 
+    ["Pink Salmon", 7.20, 7], 
+    ["Tuna", 7.20, 7], 
+    ["Smoked Marlin", 7.20, 7], 
+    ["Pufferfish", 7.20, 7], 
+    ["Blobfish", 7.20, 7]
 ]
 
-deluxe_fish = [
-    ["Snapper", "Pink Salmon", "Tuna", "Smoked Marlin", "Pufferfish", "Blobfish"],
-    [7.20, 7.20, 7.20, 7.20, 7.20, 7.20],
-    [7, 7, 7, 7, 7, 7]
+cheap_fish = [
+    ["Shark", 4.10, 7], 
+    ["Flounder", 4.10, 7], 
+    ["Cod", 4.10, 7], 
+    ["Gurnet", 4.10, 7], 
+    ["Hoki", 4.10, 7], 
+    ["Goldfish", 4.10, 7]
 ]
 
 sides = [
-    ["Scoop of Chips"],
-    [1.00],
-    [84]
+    ["Scoop of Chips", 1.00, 84]
 ]
 
 user_details = [
@@ -191,22 +195,31 @@ def order_details():
 
 
 # Function that orders items
+# TODO: Redo 
 def item_order(item_array: list):
     clear()
 
+    # Create menu
+    menu_names = []
+    menu_prices = []
+
+    for item in item_array:
+        menu_names.append(item[INDEX_FOR_NAME])
+        menu_prices.append(item[INDEX_FOR_PRICE])
+
     # Print menu
     divider()
-    print_array_multi([item_array[INDEX_FOR_NAME],
-                       format_price(item_array[INDEX_FOR_PRICE])])
+    print_array_multi([menu_names,
+                       format_price(menu_prices)])
     divider()
 
     # Get index of item from user input based on item array, and store it
     item_index = input_checking(
         "What item would you like? ", item_array[INDEX_FOR_NAME])
-    item_name = item_array[INDEX_FOR_NAME][item_index - 1]
+    item_name = item_array[item_index - 1][INDEX_FOR_NAME]
 
     # Check number of chosen item and calculate the amount the user can order
-    item_remaining = (item_array[INDEX_FOR_QUANTITY][item_index - 1]) - \
+    item_remaining = (item_array[item_index - 1][INDEX_FOR_QUANTITY]) - \
                      array_quantity_counter(item_name, user_order[INDEX_FOR_NAME])
 
     maximium_error = f"Please enter a number between 0 and {item_remaining}"
@@ -215,7 +228,7 @@ def item_order(item_array: list):
         "How many of this item would you like? ", range(item_remaining), 0, error_message=maximium_error)
 
     # Get price from array and format as string
-    item_price = (item_array[INDEX_FOR_PRICE][item_index - 1])
+    item_price = (item_array[item_index - 1][INDEX_FOR_PRICE])
     price_string = "%.2f" % (item_price * item_amount)
 
     # Print ordered item and price
@@ -249,10 +262,10 @@ def price_count_array():
     # Loop through each item in the second array
     for item_index in range(len(user_order[INDEX_FOR_PRICE])):
         # Add the price
-        price_change += user_order[INDEX_FOR_PRICE][item_index]
+        price_change += user_order[item_index][INDEX_FOR_PRICE]
 
         # If frozen -$1.05 from each fish ordered
-        if user_details[1] == "Frozen" and user_order[INDEX_FOR_NAME][item_index] not in sides[INDEX_FOR_NAME]:
+        if user_details[1] == "Frozen" and user_order[item_index][INDEX_FOR_NAME] not in sides[item_index][INDEX_FOR_NAME]:
             price_change -= 1.05
 
     # Format/round price
