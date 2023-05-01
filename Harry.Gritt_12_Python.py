@@ -44,6 +44,7 @@ user_order = [
     []
 ]
 
+
 yes = {"Y", "YES", "YE", "YEP", "SURE", "YEAH", "YO"}
 no = {"N", "NO", "NAH", "NOT", "NAY"}
 
@@ -215,7 +216,7 @@ def item_order(item_array: list):
 
     # Get index of item from user input based on item array, and store it
     item_index = input_checking(
-        "What item would you like? ", item_array[INDEX_FOR_NAME])
+        "What item would you like? ", menu_names)
     item_name = item_array[item_index - 1][INDEX_FOR_NAME]
 
     # Check number of chosen item and calculate the amount the user can order
@@ -254,6 +255,9 @@ def array_quantity_counter(key, array: list):
 
 
 def price_count_array():
+
+
+    
     # Store a base number to start counting on (0 if pickup, 5 if delivery)
     price_change = 0
     if user_details[0] == "For Delivery":
@@ -262,10 +266,10 @@ def price_count_array():
     # Loop through each item in the second array
     for item_index in range(len(user_order[INDEX_FOR_PRICE])):
         # Add the price
-        price_change += user_order[item_index][INDEX_FOR_PRICE]
+        price_change += user_order[INDEX_FOR_PRICE][item_index]
 
         # If frozen -$1.05 from each fish ordered
-        if user_details[1] == "Frozen" and user_order[item_index][INDEX_FOR_NAME] not in sides[item_index][INDEX_FOR_NAME]:
+        if user_details[1] == "Frozen" and user_order[INDEX_FOR_NAME][item_index] != sides[item_index][INDEX_FOR_NAME]:
             price_change -= 1.05
 
     # Format/round price
@@ -336,9 +340,6 @@ def print_reciept():
     # Check if user has inputed their address for delivery, if not, don't print address
     if user_details_copy[4] == "Address":
         user_details_copy.pop(4)
-
-    print("Your Reciept:")
-    divider()
 
     # Create a new array to store new order (temporary)
     user_order_temp = [
