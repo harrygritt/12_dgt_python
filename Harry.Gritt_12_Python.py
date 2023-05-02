@@ -44,7 +44,6 @@ user_order = [
     []
 ]
 
-
 yes = {"Y", "YES", "YE", "YEP", "SURE", "YEAH", "YO"}
 no = {"N", "NO", "NAH", "NOT", "NAY"}
 
@@ -179,6 +178,7 @@ def order_details():
             case 2:
                 print("For Pick up")
                 user_details[0] = "For Pick-Up"
+                user_details[4] = "Address"
                 time.sleep(2)
             case 3:
                 print("Frozen, - $1.05 per fish")
@@ -255,9 +255,6 @@ def array_quantity_counter(key, array: list):
 
 
 def price_count_array():
-
-
-    
     # Store a base number to start counting on (0 if pickup, 5 if delivery)
     price_change = 0
     if user_details[0] == "For Delivery":
@@ -404,8 +401,8 @@ def print_reciept():
                 user_details[4] = "Address"
 
                 # Clearing user order
-                user_order[0].clear()
-                user_order[1].clear()
+                user_order[INDEX_FOR_NAME].clear()
+                user_order[INDEX_FOR_PRICE].clear()
 
                 start_menu()
 
